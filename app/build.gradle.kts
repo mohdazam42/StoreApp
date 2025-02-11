@@ -10,11 +10,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.storeapp"
+    namespace = project.properties["APP_ID"] as String
     compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.example.storeapp"
+        applicationId = project.properties["APP_ID"] as String
         minSdk = libs.versions.minSdk.get().toInt()
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = libs.versions.versionCode.get().toInt()
