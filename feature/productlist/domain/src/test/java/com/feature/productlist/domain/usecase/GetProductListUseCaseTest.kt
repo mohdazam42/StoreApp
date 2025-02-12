@@ -79,7 +79,7 @@ class GetProductListUseCaseTest {
         val result = useCase().first()
 
         // Then
-        expectThat(result).isA<ApiResult.Error<List<Product>>>()
+        expectThat(result).isA<ApiResult.Error>()
         expectThat((result as ApiResult.Error).message).isEqualTo(exception.message)
 
         coVerify(exactly = 1) { mockRepository.getAllProducts() }

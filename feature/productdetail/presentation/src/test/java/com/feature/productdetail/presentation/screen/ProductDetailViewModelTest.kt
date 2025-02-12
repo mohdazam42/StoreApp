@@ -47,7 +47,7 @@ class ProductDetailViewModelTest {
                 category = "category"
             )
             coEvery { mockUseCase.invoke(productId = 1) } returns flowOf(
-                ApiResult.Loading(),
+                ApiResult.Loading,
                 ApiResult.Success(mockProduct)
             )
 
@@ -73,7 +73,7 @@ class ProductDetailViewModelTest {
             // Arrange
             val exceptionMessage = "Network Error"
             coEvery { mockUseCase.invoke(1) } returns flowOf(
-                ApiResult.Loading(),
+                ApiResult.Loading,
                 ApiResult.Error(exceptionMessage)
             )
 

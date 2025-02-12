@@ -57,7 +57,7 @@ class ProductDetailRepositoryTest {
 
             // Then
             expectThat(result).hasSize(2)
-            expectThat(result[0]).isA<ApiResult.Loading<Product>>()
+            expectThat(result[0]).isA<ApiResult.Loading>()
             expectThat(result[1]).isA<ApiResult.Success<Product>>()
 
             val successResult = result[1] as ApiResult.Success
@@ -79,8 +79,8 @@ class ProductDetailRepositoryTest {
 
             // Then
             expectThat(result).hasSize(2)
-            expectThat(result[0]).isA<ApiResult.Loading<Product>>()
-            expectThat(result[1]).isA<ApiResult.Error<Product>>()
+            expectThat(result[0]).isA<ApiResult.Loading>()
+            expectThat(result[1]).isA<ApiResult.Error>()
             expectThat((result[1] as ApiResult.Error).message).isEqualTo(exception.message)
 
             coVerify(exactly = 1) { mockApiService.getProduct(productId = 1) }

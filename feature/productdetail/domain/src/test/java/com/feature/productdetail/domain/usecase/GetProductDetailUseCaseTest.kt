@@ -51,7 +51,7 @@ class GetProductDetailUseCaseTest {
             )
 
             coEvery { mockRepository.getProduct(1) } returns flowOf(
-                ApiResult.Loading(),
+                ApiResult.Loading,
                 ApiResult.Success(mockProduct)
             )
 
@@ -60,7 +60,7 @@ class GetProductDetailUseCaseTest {
 
             // Then
             expectThat(result).hasSize(2)
-            expectThat(result[0]).isA<ApiResult.Loading<Product>>()
+            expectThat(result[0]).isA<ApiResult.Loading>()
             expectThat(result[1]).isA<ApiResult.Success<Product>>()
 
             val successResult = result[1] as ApiResult.Success
@@ -76,7 +76,7 @@ class GetProductDetailUseCaseTest {
             // Given
             val exception = RuntimeException("Repository Error")
             coEvery { mockRepository.getProduct(1) } returns flowOf(
-                ApiResult.Loading(),
+                ApiResult.Loading,
                 ApiResult.Error(exception.message ?: "Repository Error")
             )
 
@@ -85,8 +85,8 @@ class GetProductDetailUseCaseTest {
 
             // Then
             expectThat(result).hasSize(2)
-            expectThat(result[0]).isA<ApiResult.Loading<Product>>()
-            expectThat(result[1]).isA<ApiResult.Error<Product>>()
+            expectThat(result[0]).isA<ApiResult.Loading>()
+            expectThat(result[1]).isA<ApiResult.Error>()
             expectThat((result[1] as ApiResult.Error).message).isEqualTo(exception.message)
 
             coVerify(exactly = 1) { mockRepository.getProduct(1) }
