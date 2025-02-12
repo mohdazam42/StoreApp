@@ -51,7 +51,7 @@ class SafeApiCallTest {
 
             // Then
             expectThat(result).hasSize(2)
-            expectThat(result[0]).isA<ApiResult.Loading<Int>>()
+            expectThat(result[0]).isA<ApiResult.Loading>()
             expectThat(result[1]).isA<ApiResult.Success<Int>>()
             expectThat((result[1] as ApiResult.Success).data).isEqualTo(mappedValue)
 
@@ -72,8 +72,8 @@ class SafeApiCallTest {
 
             // Then
             expectThat(result).hasSize(2)
-            expectThat(result[0]).isA<ApiResult.Loading<Int>>()
-            expectThat(result[1]).isA<ApiResult.Error<Int>>()
+            expectThat(result[0]).isA<ApiResult.Loading>()
+            expectThat(result[1]).isA<ApiResult.Error>()
             expectThat((result[1] as ApiResult.Error).message).isEqualTo("Network Error")
 
             coVerify(exactly = 1) { mockApiCall() }
@@ -97,7 +97,7 @@ class SafeApiCallTest {
 
             // Then
             expectThat(result).hasSize(2)
-            expectThat(result[0]).isA<ApiResult.Loading<Int>>()
+            expectThat(result[0]).isA<ApiResult.Loading>()
             expectThat(result[1]).isA<ApiResult.Success<Int>>()
 
             coVerify(exactly = 1) { mockApiCall() }

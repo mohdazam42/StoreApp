@@ -13,7 +13,7 @@ fun <T, R> safeApiCall(
 ): Flow<ApiResult<R>> = flow {
     try {
         // loading
-        emit(ApiResult.Loading())
+        emit(ApiResult.Loading)
         //network call
         val response = withContext(Dispatchers.IO) { apiCall() }
         // Emit success
