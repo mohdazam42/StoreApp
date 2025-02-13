@@ -15,10 +15,9 @@ class ProductListViewModel @Inject constructor(private val getProductListUseCase
 
     private fun fetchAllProducts() {
         viewModelScope.launch {
+            onLoading(true)
             getProductListUseCase.invoke().collectLatest { result ->
                 when (result) {
-                    is ApiResult.Loading -> onLoading(loading = true)
-
                     is ApiResult.Success -> updateState {
                         it.copy(isLoading = false, productList = result.data)
                     }
@@ -32,7 +31,7 @@ class ProductListViewModel @Inject constructor(private val getProductListUseCase
     }
 
     override fun initState(): ProductListState = ProductListState(
-        isLoading = true,
+        isLoading = false,
         productList = emptyList(),
         error = ""
     )

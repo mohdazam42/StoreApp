@@ -20,8 +20,6 @@ class ProductDetailViewModel @Inject constructor(private val getProductDetailUse
             onLoading(loading = true)
             getProductDetailUseCase.invoke(productId).collectLatest { result ->
                 when (result) {
-                    is ApiResult.Loading -> onLoading(loading = true)
-
                     is ApiResult.Success -> updateState {
                         it.copy(isLoading = false, product = result.data)
                     }
@@ -35,7 +33,7 @@ class ProductDetailViewModel @Inject constructor(private val getProductDetailUse
     }
 
     override fun initState(): ProductDetailState = ProductDetailState(
-        isLoading = true,
+        isLoading = false,
         product = Product(
             id = 0,
             title = "",

@@ -58,9 +58,8 @@ class ProductListRepositoryTest {
             val emissions = repository.getAllProducts().toList()
 
             // Then
-            expectThat(emissions).hasSize(2)
-            expectThat(emissions[0]).isA<ApiResult.Loading>()
-            expectThat(emissions[1]).isA<ApiResult.Success<List<Product>>>()
+            expectThat(emissions).hasSize(1)
+            expectThat(emissions[0]).isA<ApiResult.Success<List<Product>>>()
 
             coVerify(exactly = 1) { mockApiService.getAllProducts() }
         }
@@ -76,10 +75,9 @@ class ProductListRepositoryTest {
             val emissions = repository.getAllProducts().toList()
 
             // Then
-            expectThat(emissions).hasSize(2)
-            expectThat(emissions[0]).isA<ApiResult.Loading>()
-            expectThat(emissions[1]).isA<ApiResult.Error>()
-            expectThat((emissions[1] as ApiResult.Error).message).isEqualTo(exception.message)
+            expectThat(emissions).hasSize(1)
+            expectThat(emissions[0]).isA<ApiResult.Error>()
+            expectThat((emissions[0] as ApiResult.Error).message).isEqualTo(exception.message)
 
             coVerify(exactly = 1) { mockApiService.getAllProducts() }
         }
