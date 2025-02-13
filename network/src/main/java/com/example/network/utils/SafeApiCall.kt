@@ -12,8 +12,6 @@ fun <T, R> safeApiCall(
     mapper: (T) -> R
 ): Flow<ApiResult<R>> = flow {
     try {
-        // loading
-        emit(ApiResult.Loading)
         //network call
         val response = withContext(Dispatchers.IO) { apiCall() }
         // Emit success

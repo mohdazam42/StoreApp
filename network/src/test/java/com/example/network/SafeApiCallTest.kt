@@ -50,10 +50,9 @@ class SafeApiCallTest {
             val result = safeApiCall(mockApiCall, mockMapper).toList()
 
             // Then
-            expectThat(result).hasSize(2)
-            expectThat(result[0]).isA<ApiResult.Loading>()
-            expectThat(result[1]).isA<ApiResult.Success<Int>>()
-            expectThat((result[1] as ApiResult.Success).data).isEqualTo(mappedValue)
+            expectThat(result).hasSize(1)
+            expectThat(result[0]).isA<ApiResult.Success<Int>>()
+            expectThat((result[0] as ApiResult.Success).data).isEqualTo(mappedValue)
 
             coVerify(exactly = 1) { mockApiCall() }
             verify(exactly = 1) { mockMapper(apiResponse) }
@@ -71,10 +70,9 @@ class SafeApiCallTest {
             val result = safeApiCall(mockApiCall, mockMapper).toList()
 
             // Then
-            expectThat(result).hasSize(2)
-            expectThat(result[0]).isA<ApiResult.Loading>()
-            expectThat(result[1]).isA<ApiResult.Error>()
-            expectThat((result[1] as ApiResult.Error).message).isEqualTo("Network Error")
+            expectThat(result).hasSize(1)
+            expectThat(result[0]).isA<ApiResult.Error>()
+            expectThat((result[0] as ApiResult.Error).message).isEqualTo("Network Error")
 
             coVerify(exactly = 1) { mockApiCall() }
             verify(exactly = 0) { mockMapper(any()) } // Mapper should not be called on error
@@ -96,9 +94,8 @@ class SafeApiCallTest {
             val result = safeApiCall(mockApiCall, mockMapper).toList()
 
             // Then
-            expectThat(result).hasSize(2)
-            expectThat(result[0]).isA<ApiResult.Loading>()
-            expectThat(result[1]).isA<ApiResult.Success<Int>>()
+            expectThat(result).hasSize(1)
+            expectThat(result[0]).isA<ApiResult.Success<Int>>()
 
             coVerify(exactly = 1) { mockApiCall() }
             verify(exactly = 1) { mockMapper(apiResponse) }

@@ -15,7 +15,6 @@ class ProductListViewModel @Inject constructor(private val getProductListUseCase
 
     private fun fetchAllProducts() {
         viewModelScope.launch {
-            onLoading(loading = true)
             getProductListUseCase.invoke().collectLatest { result ->
                 when (result) {
                     is ApiResult.Loading -> onLoading(loading = true)
