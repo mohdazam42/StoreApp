@@ -1,5 +1,6 @@
 package com.feature.productlist.presentation.screen
 
+import com.example.common.extensions.SingleValueCallback
 import com.feature.productlist.domain.model.Product
 
 sealed interface ProductListContract
@@ -12,8 +13,5 @@ data class ProductListState(
 
 sealed class ProductListEvent : ProductListContract {
     data object LoadProducts : ProductListEvent()
-}
-
-sealed interface ProductListSideEffect : ProductListContract {
-    data class NavigateToProductDetails(val id: Int) : ProductListSideEffect
+    data class OnProductClick(val id: Int, val navigateToDetails: SingleValueCallback<Int>) : ProductListEvent()
 }

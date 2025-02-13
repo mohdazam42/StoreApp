@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductListViewModel @Inject constructor(private val getProductListUseCase: GetProductListUseCase) :
-    BaseViewModel<ProductListEvent, ProductListState, ProductListSideEffect>() {
+    BaseViewModel<ProductListEvent, ProductListState>() {
 
     private fun fetchAllProducts() {
         viewModelScope.launch {
@@ -40,15 +40,12 @@ class ProductListViewModel @Inject constructor(private val getProductListUseCase
         updateState { it.copy(isLoading = loading) }
     }
 
-    override fun sendSideEffect(sideEffect: ProductListSideEffect) {
-        viewModelScope.launch {
-            sideEffectFlow.send(element = sideEffect)
-        }
-    }
-
     override fun onEvent(event: ProductListEvent) {
         when (event) {
             ProductListEvent.LoadProducts -> fetchAllProducts()
+            is ProductListEvent.OnProductClick -> {
+                event.navigateToDetails(event.id)
+            }
         }
     }
 }

@@ -48,8 +48,6 @@ import com.feature.productlist.domain.model.Rating
 import com.feature.productlist.presentation.utils.ARROW_DESC
 import com.feature.productlist.presentation.utils.PRODUCT_LIST
 import com.feature.productlist.presentation.utils.RATING
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.receiveAsFlow
 
 @Composable
 fun ProductListScreenRoute(
@@ -61,12 +59,6 @@ fun ProductListScreenRoute(
 
     LaunchedEffect(true) {
         viewModel.onEvent(ProductListEvent.LoadProducts)
-
-        viewModel.sideEffectFlow.receiveAsFlow().collectLatest { sideEffect ->
-            when (sideEffect) {
-                is ProductListSideEffect.NavigateToProductDetails -> navigateToDetails(sideEffect.id)
-            }
-        }
     }
 
     with(productListState) {
@@ -80,11 +72,7 @@ fun ProductListScreenRoute(
             ProductListScreen(
                 products = productList,
                 onProductClick = { productId ->
-                    viewModel.sendSideEffect(
-                        ProductListSideEffect.NavigateToProductDetails(
-                            productId
-                        )
-                    )
+                    viewModel.onEvent(ProductListEvent.OnProductClick(productId, navigateToDetails))
                 }
             )
         }

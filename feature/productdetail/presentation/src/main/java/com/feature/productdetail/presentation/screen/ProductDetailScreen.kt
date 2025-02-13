@@ -43,8 +43,6 @@ import com.feature.productdetail.domain.model.Rating
 import com.feature.productdetail.presentation.utils.DESCRIPTION
 import com.feature.productdetail.presentation.utils.RATING
 import com.feature.productdetail.presentation.utils.REVIEWS
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.receiveAsFlow
 
 @Composable
 fun ProductDetailScreenRoute(
@@ -56,12 +54,6 @@ fun ProductDetailScreenRoute(
 
     LaunchedEffect(true) {
         viewModel.onEvent(ProductDetailEvent.LoadProduct(productId = productId))
-
-        viewModel.sideEffectFlow.receiveAsFlow().collectLatest { sideEffect ->
-            when (sideEffect) {
-                is ProductDetailSideEffect.NavigateToBack -> navigateBack()
-            }
-        }
     }
 
     with(productState) {
@@ -74,7 +66,9 @@ fun ProductDetailScreenRoute(
         if (product.id != 0) {
             ProductDetailScreen(
                 product = product,
-                navigateBack = { viewModel.sendSideEffect(ProductDetailSideEffect.NavigateToBack) }
+                navigateBack = {
+                    viewModel.onEvent(ProductDetailEvent.OnNavigateBack(navigateBack))
+                }
             )
         }
     }

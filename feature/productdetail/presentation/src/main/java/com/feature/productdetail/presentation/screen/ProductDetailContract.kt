@@ -12,8 +12,5 @@ data class ProductDetailState(
 
 sealed class ProductDetailEvent : ProductDetailContract {
     data class LoadProduct(val productId: Int) : ProductDetailEvent()
-}
-
-sealed interface ProductDetailSideEffect : ProductDetailContract {
-    data object NavigateToBack : ProductDetailSideEffect
+    data class OnNavigateBack(val navigateBack: () -> Unit) : ProductDetailEvent()
 }

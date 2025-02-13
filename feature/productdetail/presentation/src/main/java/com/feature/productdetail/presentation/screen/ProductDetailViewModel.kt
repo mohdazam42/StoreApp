@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(private val getProductDetailUseCase: GetProductDetailUseCase) :
-    BaseViewModel<ProductDetailEvent, ProductDetailState, ProductDetailSideEffect>() {
+    BaseViewModel<ProductDetailEvent, ProductDetailState>() {
 
     private fun fetchProduct(productId: Int) {
         viewModelScope.launch {
@@ -53,15 +53,12 @@ class ProductDetailViewModel @Inject constructor(private val getProductDetailUse
         updateState { it.copy(isLoading = loading) }
     }
 
-    override fun sendSideEffect(sideEffect: ProductDetailSideEffect) {
-        viewModelScope.launch {
-            sideEffectFlow.send(element = sideEffect)
-        }
-    }
-
     override fun onEvent(event: ProductDetailEvent) {
         when (event) {
             is ProductDetailEvent.LoadProduct -> fetchProduct(event.productId)
+            is ProductDetailEvent.OnNavigateBack -> {
+                event.navigateBack()
+            }
         }
     }
 }
