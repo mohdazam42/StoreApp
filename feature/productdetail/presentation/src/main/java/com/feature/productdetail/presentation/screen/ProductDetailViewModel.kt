@@ -3,8 +3,6 @@ package com.feature.productdetail.presentation.screen
 import androidx.lifecycle.viewModelScope
 import com.example.common.base.ApiResult
 import com.example.common.base.BaseViewModel
-import com.feature.productdetail.domain.model.Product
-import com.feature.productdetail.domain.model.Rating
 import com.feature.productdetail.domain.usecase.GetProductDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -17,7 +15,7 @@ class ProductDetailViewModel @Inject constructor(private val getProductDetailUse
 
     private fun fetchProduct(productId: Int) {
         viewModelScope.launch {
-            onLoading(loading = true)
+            updateState()
             getProductDetailUseCase.invoke(productId).collectLatest { result ->
                 when (result) {
                     is ApiResult.Success -> updateState {
@@ -32,26 +30,11 @@ class ProductDetailViewModel @Inject constructor(private val getProductDetailUse
         }
     }
 
-    override fun initState(): ProductDetailState = ProductDetailState(
-        isLoading = false,
-        product = Product(
-            id = 0,
-            title = "",
-            price = 0.0,
-            image = "",
-            rating = Rating(
-                rate = 0.0,
-                count = 0
-            ),
-            description = "",
-            category = ""
-        ),
-        error = ""
-    )
-
-    override fun onLoading(loading: Boolean) {
-        updateState { it.copy(isLoading = loading) }
+    private fun updateState() {
+        updateState { it.copy(isLoading = true) }
     }
+
+    override fun initState(): ProductDetailState = ProductDetailState()
 
     override fun onEvent(event: ProductDetailEvent) {
         when (event) {
