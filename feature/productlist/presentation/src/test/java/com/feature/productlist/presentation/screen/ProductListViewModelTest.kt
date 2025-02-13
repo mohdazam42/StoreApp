@@ -10,7 +10,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.unmockkAll
-import kotlinx.coroutines.flow.flowOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -46,9 +45,8 @@ class ProductListViewModelTest {
                     rating = Rating(rate = 4.5, count = 10)
                 )
             )
-            coEvery { mockUseCase.invoke() } returns flowOf(
+            coEvery { mockUseCase.invoke() } returns
                 ApiResult.Success(mockProducts)
-            )
 
             // When
             viewModel.onEvent(ProductListEvent.LoadProducts)
@@ -70,9 +68,8 @@ class ProductListViewModelTest {
         runUnconfinedTest {
             // Given
             val exceptionMessage = "Network Error"
-            coEvery { mockUseCase.invoke() } returns flowOf(
+            coEvery { mockUseCase.invoke() } returns
                 ApiResult.Error(exceptionMessage)
-            )
 
             // When
             viewModel.onEvent(ProductListEvent.LoadProducts)

@@ -9,8 +9,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.unmockkAll
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -49,14 +47,10 @@ class GetProductListUseCaseTest {
                         Rating(4.5, 10)
                     )
                 )
-            coEvery { mockRepository.getAllProducts() } returns flowOf(
-                ApiResult.Success(
-                    mockProducts
-                )
-            )
+            coEvery { mockRepository.getAllProducts() } returns ApiResult.Success(mockProducts)
 
             // When
-            val result = useCase().first()
+            val result = useCase()
 
             // Then
             expectThat(result).isA<ApiResult.Success<List<Product>>>()
@@ -69,14 +63,11 @@ class GetProductListUseCaseTest {
     fun `Given repository fails When invoke is called Then emit Error`() = runTest {
         // Given
         val exception = RuntimeException("Repository Error")
-        coEvery { mockRepository.getAllProducts() } returns flowOf(
-            ApiResult.Error(
-                exception.message ?: "Repository Error"
-            )
-        )
+        coEvery { mockRepository.getAllProducts() } returns ApiResult.Error(
+                exception.message ?: "Repository Error")
 
         // When
-        val result = useCase().first()
+        val result = useCase()
 
         // Then
         expectThat(result).isA<ApiResult.Error>()

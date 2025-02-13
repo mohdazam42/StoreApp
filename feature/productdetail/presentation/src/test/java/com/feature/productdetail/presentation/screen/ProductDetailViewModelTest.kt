@@ -10,7 +10,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.unmockkAll
-import kotlinx.coroutines.flow.flowOf
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -46,16 +45,16 @@ class ProductDetailViewModelTest {
                 description = "description",
                 category = "category"
             )
-            coEvery { mockUseCase.invoke(productId = 1) } returns flowOf(
-                ApiResult.Success(mockProduct)
-            )
+            coEvery { mockUseCase.invoke(productId = 1) } returns ApiResult.Success(mockProduct)
 
             // When
             viewModel.onEvent(ProductDetailEvent.LoadProduct(productId = 1))
 
             // Then
             viewModel.state.test {
-                expectThat(awaitItem().isLoading).isEqualTo(true)
+                val loadingState = awaitItem()
+                expectThat(loadingState.isLoading).isEqualTo(true)
+
                 val successState = awaitItem()
                 expectThat(successState.isLoading).isEqualTo(false)
                 expectThat(successState.product).isEqualTo(mockProduct)
@@ -71,9 +70,7 @@ class ProductDetailViewModelTest {
         runUnconfinedTest {
             // Arrange
             val exceptionMessage = "Network Error"
-            coEvery { mockUseCase.invoke(1) } returns flowOf(
-                ApiResult.Error(exceptionMessage)
-            )
+            coEvery { mockUseCase.invoke(1) } returns ApiResult.Error(exceptionMessage)
 
             // Act
             viewModel.onEvent(ProductDetailEvent.LoadProduct(1))

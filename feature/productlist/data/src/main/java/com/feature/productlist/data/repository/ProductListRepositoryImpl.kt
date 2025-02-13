@@ -6,13 +6,12 @@ import com.feature.productlist.data.mappers.toDomain
 import com.feature.productlist.data.remote.ProductListApiService
 import com.feature.productlist.domain.model.Product
 import com.feature.productlist.domain.repository.ProductListRepository
-import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class ProductListRepositoryImpl @Inject constructor(private val productListApiService: ProductListApiService) :
     ProductListRepository {
 
-    override suspend fun getAllProducts(): Flow<ApiResult<List<Product>>> = safeApiCall(
+    override suspend fun getAllProducts(): ApiResult<List<Product>> = safeApiCall(
         apiCall = { productListApiService.getAllProducts() },
         mapper = { productDtoList -> productDtoList.map { it.toDomain() } }
     )

@@ -8,6 +8,6 @@ import javax.inject.Inject
 
 class GetProductDetailUseCase @Inject constructor(private val productDetailRepository: ProductDetailRepository) {
 
-    suspend operator fun invoke(productId: Int): Flow<ApiResult<Product>> =
+    suspend operator fun invoke(productId: Int): ApiResult<Product> =
         productDetailRepository.getProduct(productId)
 }

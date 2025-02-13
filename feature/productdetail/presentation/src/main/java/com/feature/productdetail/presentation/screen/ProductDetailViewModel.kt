@@ -5,7 +5,6 @@ import com.example.common.base.ApiResult
 import com.example.common.base.BaseViewModel
 import com.feature.productdetail.domain.usecase.GetProductDetailUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -14,17 +13,14 @@ class ProductDetailViewModel @Inject constructor(private val getProductDetailUse
     BaseViewModel<ProductDetailEvent, ProductDetailState>() {
 
     private fun fetchProduct(productId: Int) {
+        updateState()
         viewModelScope.launch {
-            updateState()
-            getProductDetailUseCase.invoke(productId).collectLatest { result ->
-                when (result) {
-                    is ApiResult.Success -> updateState {
-                        it.copy(isLoading = false, product = result.data)
-                    }
-
-                    is ApiResult.Error -> updateState {
-                        it.copy(isLoading = false, error = result.message)
-                    }
+            when (val result = getProductDetailUseCase.invoke(productId)) {
+                is ApiResult.Error -> updateState {
+                    it.copy(isLoading = false, error = result.message)
+                }
+                is ApiResult.Success -> updateState {
+                    it.copy(isLoading = false, product = result.data)
                 }
             }
         }

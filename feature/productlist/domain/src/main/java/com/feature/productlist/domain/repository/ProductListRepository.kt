@@ -5,5 +5,5 @@ import com.feature.productlist.domain.model.Product
 import kotlinx.coroutines.flow.Flow
 
 interface ProductListRepository {
-    suspend fun getAllProducts(): Flow<ApiResult<List<Product>>>
+    suspend fun getAllProducts(): ApiResult<List<Product>>
 }

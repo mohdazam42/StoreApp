@@ -10,13 +10,11 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.unmockkAll
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import strikt.api.expectThat
-import strikt.assertions.hasSize
 import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 
@@ -53,17 +51,16 @@ class ProductDetailRepositoryTest {
             coEvery { mockApiService.getProduct(1) } returns mockProductDto
 
             // When
-            val result = repository.getProduct(1).toList()
+            val result = repository.getProduct(1)
 
             // Then
-            expectThat(result).hasSize(1)
-            expectThat(result[0]).isA<ApiResult.Success<Product>>()
-
-            val successResult = result[0] as ApiResult.Success
+            expectThat(result).isA<ApiResult.Success<Product>>()
+            val successResult = result as ApiResult.Success
             expectThat(successResult.data.id).isEqualTo(1)
             expectThat(successResult.data.title).isEqualTo("Product 1")
+            expectThat(successResult.data.price).isEqualTo(10.5)
 
-            coVerify(exactly = 1) { mockApiService.getProduct(productId = 1) }
+            coVerify(exactly = 1) { mockApiService.getProduct(1) }
         }
 
     @Test
@@ -74,13 +71,13 @@ class ProductDetailRepositoryTest {
             coEvery { mockApiService.getProduct(productId = 1) } throws exception
 
             // When
-            val result = repository.getProduct(productId = 1).toList()
+            val result = repository.getProduct(productId = 1)
 
             // Then
-            expectThat(result).hasSize(1)
-            expectThat(result[0]).isA<ApiResult.Error>()
-            expectThat((result[0] as ApiResult.Error).message).isEqualTo(exception.message)
+            expectThat(result).isA<ApiResult.Error>()
+            val errorResult = result as ApiResult.Error
+            expectThat(errorResult.message).isEqualTo("Network Error")
 
-            coVerify(exactly = 1) { mockApiService.getProduct(productId = 1) }
+            coVerify(exactly = 1) { mockApiService.getProduct(1) }
         }
 }

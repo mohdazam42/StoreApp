@@ -10,7 +10,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.unmockkAll
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
@@ -55,11 +54,15 @@ class ProductListRepositoryTest {
             coEvery { mockApiService.getAllProducts() } returns mockProductDtos
 
             // When
-            val emissions = repository.getAllProducts().toList()
+            val result = repository.getAllProducts()
 
             // Then
-            expectThat(emissions).hasSize(1)
-            expectThat(emissions[0]).isA<ApiResult.Success<List<Product>>>()
+            expectThat(result).isA<ApiResult.Success<List<Product>>>()
+            val successResult = result as ApiResult.Success
+            expectThat(successResult.data).hasSize(1)
+            expectThat(successResult.data[0].id).isEqualTo(1)
+            expectThat(successResult.data[0].title).isEqualTo("Product 1")
+            expectThat(successResult.data[0].price).isEqualTo(10.5)
 
             coVerify(exactly = 1) { mockApiService.getAllProducts() }
         }
@@ -72,12 +75,12 @@ class ProductListRepositoryTest {
             coEvery { mockApiService.getAllProducts() } throws exception
 
             // When
-            val emissions = repository.getAllProducts().toList()
+            val result = repository.getAllProducts()
 
             // Then
-            expectThat(emissions).hasSize(1)
-            expectThat(emissions[0]).isA<ApiResult.Error>()
-            expectThat((emissions[0] as ApiResult.Error).message).isEqualTo(exception.message)
+            expectThat(result).isA<ApiResult.Error>()
+            val errorResult = result as ApiResult.Error
+            expectThat(errorResult.message).isEqualTo(exception.message)
 
             coVerify(exactly = 1) { mockApiService.getAllProducts() }
         }
