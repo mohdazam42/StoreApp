@@ -13,8 +13,8 @@ class ProductDetailViewModel @Inject constructor(private val getProductDetailUse
     BaseViewModel<ProductDetailEvent, ProductDetailState>() {
 
     private fun fetchProduct(productId: Int) {
-        updateState()
         viewModelScope.launch {
+            updateState { it.copy(isLoading = true) }
             when (val result = getProductDetailUseCase.invoke(productId)) {
                 is ApiResult.Error -> updateState {
                     it.copy(isLoading = false, error = result.message)
@@ -24,10 +24,6 @@ class ProductDetailViewModel @Inject constructor(private val getProductDetailUse
                 }
             }
         }
-    }
-
-    private fun updateState() {
-        updateState { it.copy(isLoading = true) }
     }
 
     override fun initState(): ProductDetailState = ProductDetailState()

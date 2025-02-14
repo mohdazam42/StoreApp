@@ -35,7 +35,7 @@ class SafeApiCallTest {
     }
 
     @Test
-    fun `Given a successful API call When safeApiCall is executed Then emit Loading first then Success`() =
+    fun `Given a successful API call When safeApiCall is executed Then emit Success`() =
         runUnconfinedTest {
             // Given
             val apiResponse = "Success Response"
@@ -57,7 +57,7 @@ class SafeApiCallTest {
         }
 
     @Test
-    fun `Given an API call failure When safeApiCall is executed Then emit Loading first then Error`() =
+    fun `Given an API call failure When safeApiCall is executed Then emit Error`() =
         runUnconfinedTest {
             // Given
             val exception = RuntimeException("Network Error")
@@ -73,7 +73,7 @@ class SafeApiCallTest {
             expectThat((result as ApiResult.Error).message).isEqualTo("Network Error")
 
             coVerify(exactly = 1) { mockApiCall() }
-            verify(exactly = 0) { mockMapper(any()) } // Mapper should not be called on error
+            verify(exactly = 0) { mockMapper(any()) }
         }
 
     @Test

@@ -1,5 +1,6 @@
 package com.feature.productdetail.data.remote
 
+import kotlinx.coroutines.test.runTest
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
@@ -34,7 +35,7 @@ class ProductDetailApiServiceTest {
 
     @Test
     fun `Given API responds successfully When getProduct is called Then return ProductDto`() =
-        kotlinx.coroutines.test.runTest {
+        runTest {
             // Given
             val responseJson = """
             {
@@ -69,7 +70,7 @@ class ProductDetailApiServiceTest {
 
     @Test
     fun `Given API returns error response When getProduct is called Then throw an exception`() =
-        kotlinx.coroutines.test.runTest {
+        runTest {
             // Given
             mockWebServer.enqueue(
                 MockResponse()
