@@ -22,9 +22,11 @@ import com.example.common.layout.TypographySizes
 import com.example.common.utils.FETCHING_DATA
 
 @Composable
-fun LoadingScreen() {
+fun LoadingScreen(
+    modifier: Modifier
+) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(Dimensions.dp16)
     ) {
@@ -52,7 +54,7 @@ fun LoadingScreen() {
 private fun PreviewLoadingScreen() {
     MaterialTheme {
         Surface {
-            LoadingScreen()
+            LoadingScreen(modifier = Modifier)
         }
     }
 }

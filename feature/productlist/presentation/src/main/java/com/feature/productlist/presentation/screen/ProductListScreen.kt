@@ -63,10 +63,19 @@ fun ProductListScreenRoute(
 
     with(productListState) {
         if (error.isNotBlank()) {
-            ErrorScreen(error)
+            ErrorScreen(
+                error,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(Dimensions.dp16)
+            )
         }
         if (isLoading) {
-            LoadingScreen()
+            LoadingScreen(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(Dimensions.dp16),
+            )
         }
         if (productList.isNotEmpty()) {
             ProductListScreen(
