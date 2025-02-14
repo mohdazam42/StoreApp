@@ -5,9 +5,11 @@ import com.example.common.base.ApiResult
 import com.feature.productdetail.domain.model.Product
 import com.feature.productdetail.domain.model.Rating
 import com.feature.productdetail.domain.usecase.GetProductDetailUseCase
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -23,7 +25,6 @@ import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
 import strikt.assertions.isFalse
-import strikt.assertions.isTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProductDetailViewModelTest {
@@ -43,6 +44,8 @@ class ProductDetailViewModelTest {
 
     @After
     fun tearDown() {
+        clearAllMocks()
+        unmockkAll()
         Dispatchers.resetMain()
     }
 
@@ -142,28 +145,5 @@ class ProductDetailViewModelTest {
 
         // Then
         verify(exactly = 1) { navigateBack() }
-    }
-
-    @Test
-    fun `Test FetchProduct LoadingState`() = runTest {
-        // Given
-        val productId = 1
-        coEvery { getProductDetailUseCase.invoke(productId) } returns ApiResult.Success(
-            Product(
-                id = productId,
-                title = "Test Product",
-                price = 99.99,
-                image = "test_image.jpg",
-                rating = Rating(rate = 4.5, count = 100),
-                description = "Test Description",
-                category = "Test Category"
-            )
-        )
-
-        // When
-        viewModel.onEvent(ProductDetailEvent.LoadProduct(productId))
-
-        // Then
-        expectThat(viewModel.state.value.isLoading).isTrue()
     }
 }

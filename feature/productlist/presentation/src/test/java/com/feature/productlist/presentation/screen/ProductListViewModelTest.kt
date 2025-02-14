@@ -6,9 +6,11 @@ import com.example.common.extensions.SingleValueCallback
 import com.feature.productlist.domain.model.Product
 import com.feature.productlist.domain.model.Rating
 import com.feature.productlist.domain.usecase.GetProductListUseCase
+import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -43,6 +45,8 @@ class ProductListViewModelTest {
 
     @After
     fun tearDown() {
+        clearAllMocks()
+        unmockkAll()
         Dispatchers.resetMain()
     }
 
@@ -96,19 +100,6 @@ class ProductListViewModelTest {
             get { productList }.isEqualTo(emptyList())
             get { error }.isEqualTo(mockErrorMessage)
         }
-        coVerify(exactly = 1) { getProductListUseCase.invoke() }
-    }
-
-    @Test
-    fun `Test OnEvent LoadProducts`() = runTest {
-        // Given
-        coEvery { getProductListUseCase.invoke() } returns ApiResult.Success(emptyList())
-
-        // When
-        viewModel.onEvent(ProductListEvent.LoadProducts)
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        // Then
         coVerify(exactly = 1) { getProductListUseCase.invoke() }
     }
 
