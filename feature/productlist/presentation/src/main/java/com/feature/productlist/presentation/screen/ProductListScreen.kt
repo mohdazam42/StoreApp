@@ -30,17 +30,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.common.extensions.SingleValueCallback
+import com.example.common.layout.Colors
 import com.example.common.layout.Dimensions
 import com.example.common.layout.TypographySizes
 import com.example.common.layout.component.ErrorScreen
-import com.example.common.layout.component.FullScreenCircularLoading
+import com.example.common.layout.component.LoadingScreen
 import com.example.common.layout.component.ProductImage
 import com.example.common.layout.component.TitleBar
 import com.feature.productlist.domain.model.Product
@@ -66,7 +66,7 @@ fun ProductListScreenRoute(
             ErrorScreen(error)
         }
         if (isLoading) {
-            FullScreenCircularLoading()
+            LoadingScreen()
         }
         if (productList.isNotEmpty()) {
             ProductListScreen(
@@ -96,7 +96,7 @@ fun ProductListScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .background(Color.White)
+                .background(Colors.White)
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
@@ -123,7 +123,7 @@ fun ProductItem(
             .padding(Dimensions.dp8),
         elevation = CardDefaults.cardElevation(defaultElevation = Dimensions.dp4),
         shape = RoundedCornerShape(Dimensions.dp12),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = Colors.White),
         onClick = {
             onClick(product.id)
         }
@@ -170,7 +170,7 @@ fun ProductItem(
                     Icon(
                         imageVector = Icons.Default.Star,
                         contentDescription = RATING,
-                        tint = Color.Yellow,
+                        tint = Colors.Yellow,
                         modifier = Modifier.size(Dimensions.dp16)
                     )
 
@@ -179,7 +179,7 @@ fun ProductItem(
                     Text(
                         text = "${product.rating.rate} $RATING",
                         fontSize = TypographySizes.sp12,
-                        color = Color.Gray
+                        color = Colors.Gray
                     )
                 }
             }
@@ -188,7 +188,7 @@ fun ProductItem(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                 contentDescription = ARROW_DESC,
                 modifier = Modifier.size(Dimensions.dp24),
-                tint = Color.Black
+                tint = Colors.Black
             )
         }
     }

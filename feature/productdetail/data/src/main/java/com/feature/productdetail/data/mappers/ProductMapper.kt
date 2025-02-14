@@ -13,7 +13,9 @@ fun ProductDto.toDomain(): Product = with(receiver = this) {
         image = image,
         rating = rating.toDomain(),
         description = this.description,
-        category = this.category
+        category = this.category.replaceFirstChar {
+            if (it.isLowerCase()) it.uppercase() else it.toString()
+        }
     )
 }
 

@@ -26,16 +26,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.common.extensions.EmptyCallback
+import com.example.common.layout.Colors
 import com.example.common.layout.Dimensions
 import com.example.common.layout.TypographySizes
 import com.example.common.layout.component.ErrorScreen
-import com.example.common.layout.component.FullScreenCircularLoading
+import com.example.common.layout.component.LoadingScreen
 import com.example.common.layout.component.ProductImage
 import com.example.common.layout.component.TitleBar
 import com.feature.productdetail.domain.model.Product
@@ -61,7 +61,7 @@ fun ProductDetailScreenRoute(
             ErrorScreen(error)
         }
         if (isLoading) {
-            FullScreenCircularLoading()
+            LoadingScreen()
         }
         if (product.id != 0) {
             ProductDetailScreen(
@@ -92,7 +92,7 @@ fun ProductDetailScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-                .background(Color.White)
+                .background(Colors.White)
         ) {
             // Main content that scrolls
             Column(
@@ -135,14 +135,14 @@ fun ProductDetailScreen(
                         Text(
                             text = product.title,
                             fontSize = TypographySizes.sp16,
-                            color = Color.DarkGray,
+                            color = Colors.Gray,
                             modifier = Modifier.weight(1f)
                         )
 
                         Text(
                             text = String.format("$%.2f", product.price),
                             fontSize = TypographySizes.sp18,
-                            color = Color.DarkGray,
+                            color = Colors.Gray,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -156,7 +156,7 @@ fun ProductDetailScreen(
                         Icon(
                             imageVector = Icons.Default.Star,
                             contentDescription = RATING,
-                            tint = Color.DarkGray,
+                            tint = Colors.Yellow,
                             modifier = Modifier.size(Dimensions.dp20)
                         )
 
@@ -165,7 +165,7 @@ fun ProductDetailScreen(
                         Text(
                             text = "${product.rating.rate} $RATING",
                             fontSize = TypographySizes.sp16,
-                            color = Color.DarkGray,
+                            color = Colors.Gray,
                         )
 
                         Spacer(modifier = Modifier.width(Dimensions.dp2))
@@ -173,7 +173,7 @@ fun ProductDetailScreen(
                         Text(
                             text = "(${product.rating.count} $REVIEWS)",
                             fontSize = TypographySizes.sp18,
-                            color = Color.DarkGray
+                            color = Colors.Gray
                         )
                     }
 
@@ -183,7 +183,7 @@ fun ProductDetailScreen(
                         text = DESCRIPTION,
                         fontSize = TypographySizes.sp18,
                         fontWeight = FontWeight.SemiBold,
-                        color = Color.Black
+                        color = Colors.Black
                     )
 
                     Spacer(modifier = Modifier.height(Dimensions.dp8))
@@ -191,7 +191,7 @@ fun ProductDetailScreen(
                     Text(
                         text = product.description,
                         fontSize = TypographySizes.sp18,
-                        color = Color.Black,
+                        color = Colors.Black,
                         lineHeight = TypographySizes.sp22
                     )
 

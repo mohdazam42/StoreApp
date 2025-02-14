@@ -39,6 +39,7 @@ dependencies {
     implementation(libs.bundles.coil)
     api(libs.bundles.compose)
     api(libs.hilt.android)
+    debugImplementation(libs.ui.tooling)
     ksp(libs.hilt.android.compiler)
     testImplementation(libs.bundles.unit.testing)
 }

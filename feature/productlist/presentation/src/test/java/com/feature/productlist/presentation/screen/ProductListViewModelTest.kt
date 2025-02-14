@@ -124,6 +124,6 @@ class ProductListViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
-        verify { navigateToDetails.invoke(productId) }
+        verify(exactly = 1) { navigateToDetails.invoke(productId) }
     }
 }
