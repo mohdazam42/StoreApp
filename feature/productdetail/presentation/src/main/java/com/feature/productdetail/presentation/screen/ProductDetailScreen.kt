@@ -56,25 +56,25 @@ fun ProductDetailScreenRoute(
         viewModel.onEvent(ProductDetailEvent.LoadProduct(productId = productId))
     }
 
-    with(productState) {
-        if (error.isNotBlank()) {
-            ErrorScreen(
-                error,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(Dimensions.dp16)
-                )
-        }
-        if (isLoading) {
+    when(val state = productState) {
+        is ProductDetailState.Loading -> {
             LoadingScreen(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(Dimensions.dp16),
             )
         }
-        if (product.id != 0) {
+        is ProductDetailState.Error -> {
+            ErrorScreen(
+                errorMessage = state.message,
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(Dimensions.dp16)
+            )
+        }
+        is ProductDetailState.Success -> {
             ProductDetailScreen(
-                product = product,
+                product = state.product,
                 navigateBack = {
                     viewModel.onEvent(ProductDetailEvent.OnNavigateBack(navigateBack))
                 }

@@ -24,7 +24,7 @@ import org.junit.Rule
 import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
-import strikt.assertions.isFalse
+import strikt.assertions.isTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProductDetailViewModelTest {
@@ -52,7 +52,7 @@ class ProductDetailViewModelTest {
     @Test
     fun `Test Fetch Product Success`() = runTest {
         // Given
-        val product = Product(
+        val mockProduct = Product(
             id = 1,
             title = "Test Product",
             price = 99.99,
@@ -61,19 +61,18 @@ class ProductDetailViewModelTest {
             description = "Test Description",
             category = "Test Category"
         )
-        coEvery { getProductDetailUseCase.invoke(product.id) } returns ApiResult.Success(product)
+        coEvery { getProductDetailUseCase.invoke(mockProduct.id) } returns ApiResult.Success(mockProduct)
 
         // When
-        viewModel.onEvent(ProductDetailEvent.LoadProduct(product.id))
+        viewModel.onEvent(ProductDetailEvent.LoadProduct(mockProduct.id))
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
         expectThat(viewModel.state.value) {
-            get { isLoading }.isFalse()
-            get { this.product }.isEqualTo(product)
-            get { error }.isEqualTo("")
+            get { this is ProductDetailState.Success }.isTrue()
+            get { (this as ProductDetailState.Success).product }.isEqualTo(mockProduct)
         }
-        coVerify(exactly = 1) { getProductDetailUseCase.invoke(product.id) }
+        coVerify(exactly = 1) { getProductDetailUseCase.invoke(mockProduct.id) }
     }
 
     @Test
@@ -89,22 +88,8 @@ class ProductDetailViewModelTest {
 
         // Then
         expectThat(viewModel.state.value) {
-            get { isLoading }.isFalse()
-            get { product }.isEqualTo(
-                Product(
-                    id = 0,
-                    title = "",
-                    price = 0.0,
-                    image = "",
-                    rating = Rating(
-                        rate = 0.0,
-                        count = 0
-                    ),
-                    description = "",
-                    category = ""
-                )
-            )
-            get { error }.isEqualTo(errorMessage)
+            get { this is ProductDetailState.Error }.isTrue()
+            get { (this as ProductDetailState.Error).message }.isEqualTo(errorMessage)
         }
         coVerify(exactly = 1) { getProductDetailUseCase.invoke(productId) }
     }

@@ -25,7 +25,7 @@ import org.junit.Rule
 import org.junit.Test
 import strikt.api.expectThat
 import strikt.assertions.isEqualTo
-import strikt.assertions.isFalse
+import strikt.assertions.isTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProductListViewModelTest {
@@ -77,9 +77,8 @@ class ProductListViewModelTest {
 
         // Then
         expectThat(viewModel.state.value) {
-            get { isLoading }.isFalse()
-            get { productList }.isEqualTo(mockProductList)
-            get { error }.isEqualTo("")
+            get { this is ProductListState.Success }.isTrue()
+            get { (this as ProductListState.Success).productList }.isEqualTo(mockProductList)
         }
         coVerify(exactly = 1) { getProductListUseCase.invoke() }
     }
@@ -96,9 +95,8 @@ class ProductListViewModelTest {
 
         // Then
         expectThat(viewModel.state.value) {
-            get { isLoading }.isFalse()
-            get { productList }.isEqualTo(emptyList())
-            get { error }.isEqualTo(mockErrorMessage)
+            get { this is ProductListState.Error }.isTrue()
+            get { (this as ProductListState.Error).message }.isEqualTo(mockErrorMessage)
         }
         coVerify(exactly = 1) { getProductListUseCase.invoke() }
     }
