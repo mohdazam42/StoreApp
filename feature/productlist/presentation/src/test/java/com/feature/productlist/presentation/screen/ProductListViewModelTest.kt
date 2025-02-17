@@ -1,6 +1,5 @@
 package com.feature.productlist.presentation.screen
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.common.base.ApiResult
 import com.example.common.extensions.SingleValueCallback
 import com.feature.productlist.domain.model.Product
@@ -21,17 +20,13 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import strikt.api.expectThat
+import strikt.assertions.isA
 import strikt.assertions.isEqualTo
-import strikt.assertions.isTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProductListViewModelTest {
-
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val testDispatcher: TestDispatcher = StandardTestDispatcher()
     private val getProductListUseCase: GetProductListUseCase = mockk()
@@ -76,10 +71,9 @@ class ProductListViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
-        expectThat(viewModel.state.value) {
-            get { this is ProductListState.Success }.isTrue()
-            get { (this as ProductListState.Success).productList }.isEqualTo(mockProductList)
-        }
+        val result = viewModel.state.value
+        expectThat(result).isA<ProductListState.Success>()
+        expectThat((result as ProductListState.Success).productList).isEqualTo(mockProductList)
         coVerify(exactly = 1) { getProductListUseCase.invoke() }
     }
 
@@ -94,10 +88,9 @@ class ProductListViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
-        expectThat(viewModel.state.value) {
-            get { this is ProductListState.Error }.isTrue()
-            get { (this as ProductListState.Error).message }.isEqualTo(mockErrorMessage)
-        }
+        val result = viewModel.state.value
+        expectThat(result).isA<ProductListState.Error>()
+        expectThat((result as ProductListState.Error).message).isEqualTo(mockErrorMessage)
         coVerify(exactly = 1) { getProductListUseCase.invoke() }
     }
 

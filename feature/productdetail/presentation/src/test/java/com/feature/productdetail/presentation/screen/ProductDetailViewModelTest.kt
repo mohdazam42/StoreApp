@@ -1,6 +1,5 @@
 package com.feature.productdetail.presentation.screen
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.common.base.ApiResult
 import com.feature.productdetail.domain.model.Product
 import com.feature.productdetail.domain.model.Rating
@@ -20,17 +19,13 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 import strikt.api.expectThat
+import strikt.assertions.isA
 import strikt.assertions.isEqualTo
-import strikt.assertions.isTrue
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProductDetailViewModelTest {
-
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val testDispatcher: TestDispatcher = StandardTestDispatcher()
     private val getProductDetailUseCase: GetProductDetailUseCase = mockk()
@@ -54,12 +49,12 @@ class ProductDetailViewModelTest {
         // Given
         val mockProduct = Product(
             id = 1,
-            title = "Test Product",
+            title = "Product title",
             price = 99.99,
-            image = "test_image.jpg",
+            image = "image.jpg",
             rating = Rating(rate = 4.5, count = 100),
-            description = "Test Description",
-            category = "Test Category"
+            description = "Test description",
+            category = "Test category"
         )
         coEvery { getProductDetailUseCase.invoke(mockProduct.id) } returns ApiResult.Success(mockProduct)
 
@@ -68,10 +63,9 @@ class ProductDetailViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
-        expectThat(viewModel.state.value) {
-            get { this is ProductDetailState.Success }.isTrue()
-            get { (this as ProductDetailState.Success).product }.isEqualTo(mockProduct)
-        }
+        val result = viewModel.state.value
+        expectThat(result).isA<ProductDetailState.Success>()
+        expectThat((result as ProductDetailState.Success).product).isEqualTo(mockProduct)
         coVerify(exactly = 1) { getProductDetailUseCase.invoke(mockProduct.id) }
     }
 
@@ -87,10 +81,9 @@ class ProductDetailViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
-        expectThat(viewModel.state.value) {
-            get { this is ProductDetailState.Error }.isTrue()
-            get { (this as ProductDetailState.Error).message }.isEqualTo(errorMessage)
-        }
+        val result = viewModel.state.value
+        expectThat(result).isA<ProductDetailState.Error>()
+        expectThat((result as ProductDetailState.Error).message).isEqualTo(errorMessage)
         coVerify(exactly = 1) { getProductDetailUseCase.invoke(productId) }
     }
 
@@ -101,12 +94,12 @@ class ProductDetailViewModelTest {
         coEvery { getProductDetailUseCase.invoke(productId) } returns ApiResult.Success(
             Product(
                 id = productId,
-                title = "Test Product",
+                title = "Product title",
                 price = 99.99,
-                image = "test_image.jpg",
+                image = "image.jpg",
                 rating = Rating(rate = 4.5, count = 100),
-                description = "Test Description",
-                category = "Test Category"
+                description = "Test description",
+                category = "Test category"
             )
         )
 

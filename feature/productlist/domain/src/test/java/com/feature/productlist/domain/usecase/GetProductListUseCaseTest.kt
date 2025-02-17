@@ -34,7 +34,7 @@ class GetProductListUseCaseTest {
     }
 
     @Test
-    fun `Given repository returns data successfully When invoke is called Then emit Success`() =
+    fun `Given repository returns data successfully When invoke is called and return Success`() =
         runTest {
             // Given
             val mockProducts =
@@ -60,7 +60,7 @@ class GetProductListUseCaseTest {
         }
 
     @Test
-    fun `Given repository fails When invoke is called Then emit Error`() = runTest {
+    fun `Given repository fails When invoke is called and return Error`() = runTest {
         // Given
         val exception = RuntimeException("Repository Error")
         coEvery { mockRepository.getAllProducts() } returns ApiResult.Error(
