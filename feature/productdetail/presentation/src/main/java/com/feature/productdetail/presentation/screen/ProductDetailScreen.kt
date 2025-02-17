@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.common.extensions.EmptyCallback
+import com.example.common.extensions.formatPrice
 import com.example.common.layout.Colors
 import com.example.common.layout.Dimensions
 import com.example.common.layout.TypographySizes
@@ -42,7 +43,6 @@ import com.feature.productdetail.domain.model.Rating
 import com.feature.productdetail.presentation.utils.DESCRIPTION
 import com.feature.productdetail.presentation.utils.RATING
 import com.feature.productdetail.presentation.utils.REVIEWS
-import java.util.Locale
 
 @Composable
 fun ProductDetailScreenRoute(
@@ -150,7 +150,7 @@ fun ProductDetailScreen(
                         Spacer(modifier = Modifier.width(Dimensions.dp6))
 
                         Text(
-                            text = String.format(Locale.US, "$%.2f", product.price),
+                            text = product.price.formatPrice(),
                             fontSize = TypographySizes.sp18,
                             color = Colors.Black,
                             fontWeight = FontWeight.Bold

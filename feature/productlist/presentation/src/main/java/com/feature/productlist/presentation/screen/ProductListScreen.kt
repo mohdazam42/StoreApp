@@ -35,6 +35,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.common.extensions.SingleValueCallback
+import com.example.common.extensions.formatPrice
 import com.example.common.layout.Colors
 import com.example.common.layout.Dimensions
 import com.example.common.layout.TypographySizes
@@ -47,7 +48,6 @@ import com.feature.productlist.domain.model.Rating
 import com.feature.productlist.presentation.utils.ARROW_DESC
 import com.feature.productlist.presentation.utils.PRODUCT_LIST
 import com.feature.productlist.presentation.utils.RATING
-import java.util.Locale
 
 @Composable
 fun ProductListScreenRoute(
@@ -168,7 +168,7 @@ fun ProductItem(
                 )
 
                 Text(
-                    text = String.format(Locale.US, "$%.2f", product.price),
+                    text = product.price.formatPrice(),
                     fontSize = TypographySizes.sp14,
                     fontWeight = FontWeight.Medium
                 )
