@@ -2,7 +2,12 @@ package com.example.network.di
 
 import android.util.Log
 import com.example.network.utils.BASE_URL
+import com.example.network.utils.EMPTY_ERROR_BODY
+import com.example.network.utils.ERROR_BODY
 import com.example.network.utils.HTTP_ERROR_TAG
+import com.example.network.utils.MESSAGE
+import com.example.network.utils.NETWORK_ERROR
+import com.example.network.utils.RESPONSE_CODE
 import com.example.network.utils.TAG
 import dagger.Module
 import dagger.Provides
@@ -10,6 +15,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,10 +34,22 @@ object NetworkModule {
 
         val errorInterceptor = Interceptor { chain ->
             val request = chain.request()
-            val response = chain.proceed(request)
+            val response: Response
+            try {
+                response = chain.proceed(request)
+            } catch (e: Exception) {
+                Log.e(TAG, "$NETWORK_ERROR: ${e.message}")
+                throw e
+            }
 
             if (!response.isSuccessful) {
-                Log.e(TAG, "$HTTP_ERROR_TAG ${response.code}")
+                val errorBody = response.body?.string() ?: EMPTY_ERROR_BODY
+                Log.e(TAG,
+                    "$HTTP_ERROR_TAG : ${request.url}\n" +
+                            "$RESPONSE_CODE: ${response.code}\n" +
+                            "$MESSAGE: ${response.message}\n" +
+                            "$ERROR_BODY: $errorBody"
+                )
             }
             response
         }
