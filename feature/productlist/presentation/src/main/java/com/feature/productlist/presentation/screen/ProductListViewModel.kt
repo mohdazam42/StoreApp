@@ -25,7 +25,6 @@ class ProductListViewModel @Inject constructor(private val getProductListUseCase
             when (val result = getProductListUseCase()) {
                 is ApiResult.Error ->  {
                     _state.value = ProductListState.Error(result.message)
-                    isLoaded = true
                 }
                 is ApiResult.Success ->  {
                     _state.value = ProductListState.Success(result.data)
@@ -37,9 +36,14 @@ class ProductListViewModel @Inject constructor(private val getProductListUseCase
 
     internal fun onEvent(event: ProductListEvent) {
         when (event) {
-            ProductListEvent.LoadProducts -> fetchAllProducts()
+            is ProductListEvent.LoadProducts -> {
+                fetchAllProducts()
+            }
             is ProductListEvent.OnProductClick -> {
                 event.navigateToDetails(event.id)
+            }
+            is ProductListEvent.OnRetry -> {
+                fetchAllProducts()
             }
         }
     }

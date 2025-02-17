@@ -69,7 +69,10 @@ fun ProductDetailScreenRoute(
                 errorMessage = state.message,
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(Dimensions.dp16)
+                    .padding(Dimensions.dp16),
+                onRetry = {
+                    viewModel.onEvent(ProductDetailEvent.OnRetry(productId = productId))
+                }
             )
         }
         is ProductDetailState.Success -> {
