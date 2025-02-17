@@ -1,6 +1,5 @@
 package com.feature.productlist.presentation.screen
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -48,6 +47,7 @@ import com.feature.productlist.domain.model.Rating
 import com.feature.productlist.presentation.utils.ARROW_DESC
 import com.feature.productlist.presentation.utils.PRODUCT_LIST
 import com.feature.productlist.presentation.utils.RATING
+import java.util.Locale
 
 @Composable
 fun ProductListScreenRoute(
@@ -120,7 +120,6 @@ fun ProductListScreen(
     }
 }
 
-@SuppressLint("DefaultLocale")
 @Composable
 fun ProductItem(
     product: Product,
@@ -169,7 +168,7 @@ fun ProductItem(
                 )
 
                 Text(
-                    text = String.format("$%.2f", product.price),
+                    text = String.format(Locale.US, "$%.2f", product.price),
                     fontSize = TypographySizes.sp14,
                     fontWeight = FontWeight.Medium
                 )

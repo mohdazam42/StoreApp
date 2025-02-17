@@ -1,6 +1,5 @@
 package com.feature.productdetail.presentation.screen
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +42,7 @@ import com.feature.productdetail.domain.model.Rating
 import com.feature.productdetail.presentation.utils.DESCRIPTION
 import com.feature.productdetail.presentation.utils.RATING
 import com.feature.productdetail.presentation.utils.REVIEWS
+import java.util.Locale
 
 @Composable
 fun ProductDetailScreenRoute(
@@ -83,7 +83,6 @@ fun ProductDetailScreenRoute(
     }
 }
 
-@SuppressLint("DefaultLocale")
 @Composable
 fun ProductDetailScreen(
     product: Product,
@@ -151,7 +150,7 @@ fun ProductDetailScreen(
                         Spacer(modifier = Modifier.width(Dimensions.dp6))
 
                         Text(
-                            text = String.format("$%.2f", product.price),
+                            text = String.format(Locale.US, "$%.2f", product.price),
                             fontSize = TypographySizes.sp18,
                             color = Colors.Black,
                             fontWeight = FontWeight.Bold
