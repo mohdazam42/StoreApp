@@ -136,54 +136,45 @@ fun ProductDetailScreen(
 
                     Spacer(modifier = Modifier.height(Dimensions.dp6))
 
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = product.title,
-                            fontSize = TypographySizes.sp16,
-                            color = Colors.Gray,
-                            modifier = Modifier.weight(1f)
-                        )
-
-                        Spacer(modifier = Modifier.width(Dimensions.dp6))
-
-                        Text(
-                            text = product.price.formatPrice(),
-                            fontSize = TypographySizes.sp18,
-                            color = Colors.Black,
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
-
                     Spacer(modifier = Modifier.height(Dimensions.dp6))
 
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Star,
-                            contentDescription = RATING,
-                            tint = Colors.Yellow,
-                            modifier = Modifier.size(Dimensions.dp20)
-                        )
+                        Row(
+                            modifier = Modifier.weight(1f),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Star,
+                                contentDescription = RATING,
+                                tint = Colors.Yellow,
+                                modifier = Modifier.size(Dimensions.dp20)
+                            )
 
-                        Spacer(modifier = Modifier.width(Dimensions.dp6))
+                            Spacer(modifier = Modifier.width(Dimensions.dp6))
+
+                            Text(
+                                text = "${product.rating.rate} $RATING",
+                                fontSize = TypographySizes.sp16,
+                                color = Colors.Gray,
+                            )
+
+                            Spacer(modifier = Modifier.width(Dimensions.dp2))
+
+                            Text(
+                                text = "(${product.rating.count} $REVIEWS)",
+                                fontSize = TypographySizes.sp18,
+                                color = Colors.Gray
+                            )
+                        }
 
                         Text(
-                            text = "${product.rating.rate} $RATING",
-                            fontSize = TypographySizes.sp16,
-                            color = Colors.Gray,
-                        )
-
-                        Spacer(modifier = Modifier.width(Dimensions.dp2))
-
-                        Text(
-                            text = "(${product.rating.count} $REVIEWS)",
+                            text = product.price.formatPrice(),
                             fontSize = TypographySizes.sp18,
-                            color = Colors.Gray
+                            color = Colors.Black,
+                            fontWeight = FontWeight.Bold
                         )
                     }
 
