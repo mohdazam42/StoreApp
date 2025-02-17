@@ -148,6 +148,8 @@ fun ProductDetailScreen(
                             modifier = Modifier.weight(1f)
                         )
 
+                        Spacer(modifier = Modifier.width(Dimensions.dp6))
+
                         Text(
                             text = String.format("$%.2f", product.price),
                             fontSize = TypographySizes.sp18,
