@@ -151,7 +151,7 @@ fun ProductDetailScreen(
                         Text(
                             text = String.format("$%.2f", product.price),
                             fontSize = TypographySizes.sp18,
-                            color = Colors.Gray,
+                            color = Colors.Black,
                             fontWeight = FontWeight.Bold
                         )
                     }
@@ -200,7 +200,7 @@ fun ProductDetailScreen(
                     Text(
                         text = product.description,
                         fontSize = TypographySizes.sp18,
-                        color = Colors.Black,
+                        color = Colors.Gray,
                         lineHeight = TypographySizes.sp22
                     )
 
