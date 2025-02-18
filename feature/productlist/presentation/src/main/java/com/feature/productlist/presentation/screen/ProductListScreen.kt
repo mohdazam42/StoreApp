@@ -21,7 +21,6 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,10 +38,10 @@ import com.example.common.extensions.formatPrice
 import com.example.common.layout.Colors
 import com.example.common.layout.Dimensions
 import com.example.common.layout.TypographySizes
+import com.example.common.layout.component.CommonScaffold
 import com.example.common.layout.component.ErrorScreen
 import com.example.common.layout.component.LoadingScreen
 import com.example.common.layout.component.ProductImage
-import com.example.common.layout.component.TitleBar
 import com.feature.productlist.domain.model.Product
 import com.feature.productlist.domain.model.Rating
 import com.feature.productlist.presentation.utils.ARROW_DESC
@@ -96,13 +95,10 @@ fun ProductListScreen(
     products: List<Product>,
     onProductClick: SingleValueCallback<Int>
 ) {
-    Scaffold(
-        topBar = {
-            TitleBar(
-                toolbarTitle = PRODUCT_LIST,
-                navigationButtonAction = null
-            )
-        },
+    CommonScaffold(
+        modifier = Modifier,
+        toolbarTitle = PRODUCT_LIST,
+        navigationButtonAction = null
     ) { innerPadding ->
         Box(
             modifier = Modifier

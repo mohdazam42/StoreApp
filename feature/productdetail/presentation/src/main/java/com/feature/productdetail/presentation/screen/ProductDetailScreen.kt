@@ -17,7 +17,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,10 +33,10 @@ import com.example.common.extensions.formatPrice
 import com.example.common.layout.Colors
 import com.example.common.layout.Dimensions
 import com.example.common.layout.TypographySizes
+import com.example.common.layout.component.CommonScaffold
 import com.example.common.layout.component.ErrorScreen
 import com.example.common.layout.component.LoadingScreen
 import com.example.common.layout.component.ProductImage
-import com.example.common.layout.component.TitleBar
 import com.feature.productdetail.domain.model.Product
 import com.feature.productdetail.domain.model.Rating
 import com.feature.productdetail.presentation.utils.DESCRIPTION
@@ -91,13 +90,10 @@ fun ProductDetailScreen(
     product: Product,
     navigateBack: EmptyCallback = {}
 ) {
-    Scaffold(
-        topBar = {
-            TitleBar(
-                toolbarTitle = product.category,
-                navigationButtonAction = navigateBack
-            )
-        },
+    CommonScaffold(
+        modifier = Modifier,
+        toolbarTitle = product.category,
+        navigationButtonAction = navigateBack
     ) { innerPadding ->
         Box(
             modifier = Modifier
