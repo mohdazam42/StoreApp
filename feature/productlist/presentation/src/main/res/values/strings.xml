@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="product_list">Products</string>
+    <string name="ratting">Rating</string>
+    <string name="arrow_desc">Go to details</string>
+</resources>

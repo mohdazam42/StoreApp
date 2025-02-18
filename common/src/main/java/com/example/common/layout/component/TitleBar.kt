@@ -14,8 +14,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.example.common.extensions.EmptyCallback
-import com.example.common.utils.BACK_ARROW
+import com.example.common.utils.Constants.BACK_ARROW
 
 
 @Composable
@@ -55,7 +56,7 @@ fun TitleBar(
             IconButton(onClick = it) {
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = BACK_ARROW
+                    contentDescription = stringResource(BACK_ARROW)
                 )
             }
         }

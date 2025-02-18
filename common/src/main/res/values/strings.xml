@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fetching_data">Fetching Data…</string>
+    <string name="product_image_desc">Product Image</string>
+    <string name="back_arrow_desc">Back Arrow</string>
+    <string name="try_again">Try Again</string>
+</resources>

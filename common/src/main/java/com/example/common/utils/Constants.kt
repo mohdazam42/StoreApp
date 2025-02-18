@@ -1,5 +1,10 @@
 package com.example.common.utils
 
-const val FETCHING_DATA = "Fetching Data..."
-const val PRODUCT_IMAGE_DESC = "Product Image"
-const val BACK_ARROW = "Back Arrow"
+import com.example.common.R
+
+object Constants {
+    val FETCHING_DATA = R.string.fetching_data
+    val PRODUCT_IMAGE_DESC = R.string.product_image_desc
+    val BACK_ARROW = R.string.back_arrow_desc
+    val TRY_AGAIN = R.string.try_again
+}

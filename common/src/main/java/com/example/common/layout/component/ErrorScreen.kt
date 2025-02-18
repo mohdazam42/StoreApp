@@ -12,10 +12,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.common.layout.Colors
 import com.example.common.layout.Dimensions
 import com.example.common.layout.TypographySizes
+import com.example.common.utils.Constants.TRY_AGAIN
 
 @Composable
 fun ErrorScreen(
@@ -40,7 +42,7 @@ fun ErrorScreen(
             Button(onClick = {
                 onRetry()
             }) {
-                Text(text = "Try Again")
+                Text(text = stringResource(TRY_AGAIN))
             }
         }
     }

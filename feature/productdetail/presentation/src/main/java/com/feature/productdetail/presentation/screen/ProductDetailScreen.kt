@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,9 +40,9 @@ import com.example.common.layout.component.LoadingScreen
 import com.example.common.layout.component.ProductImage
 import com.feature.productdetail.domain.model.Product
 import com.feature.productdetail.domain.model.Rating
-import com.feature.productdetail.presentation.utils.DESCRIPTION
-import com.feature.productdetail.presentation.utils.RATING
-import com.feature.productdetail.presentation.utils.REVIEWS
+import com.feature.productdetail.presentation.utils.Constants.DESCRIPTION
+import com.feature.productdetail.presentation.utils.Constants.RATING
+import com.feature.productdetail.presentation.utils.Constants.REVIEWS
 
 @Composable
 fun ProductDetailScreenRoute(
@@ -147,7 +148,7 @@ fun ProductDetailScreen(
                         ) {
                             Icon(
                                 imageVector = Icons.Default.Star,
-                                contentDescription = RATING,
+                                contentDescription = stringResource(RATING),
                                 tint = Colors.Yellow,
                                 modifier = Modifier.size(Dimensions.dp20)
                             )
@@ -155,7 +156,7 @@ fun ProductDetailScreen(
                             Spacer(modifier = Modifier.width(Dimensions.dp6))
 
                             Text(
-                                text = "${product.rating.rate} $RATING",
+                                text = "${product.rating.rate} ${stringResource(RATING)}",
                                 fontSize = TypographySizes.sp16,
                                 color = Colors.Gray,
                             )
@@ -163,7 +164,7 @@ fun ProductDetailScreen(
                             Spacer(modifier = Modifier.width(Dimensions.dp2))
 
                             Text(
-                                text = "(${product.rating.count} $REVIEWS)",
+                                text = "(${product.rating.count} ${stringResource(REVIEWS)}",
                                 fontSize = TypographySizes.sp18,
                                 color = Colors.Gray
                             )
@@ -180,7 +181,7 @@ fun ProductDetailScreen(
                     Spacer(modifier = Modifier.height(Dimensions.dp12))
 
                     Text(
-                        text = DESCRIPTION,
+                        text = stringResource(DESCRIPTION),
                         fontSize = TypographySizes.sp18,
                         fontWeight = FontWeight.SemiBold,
                         color = Colors.Black

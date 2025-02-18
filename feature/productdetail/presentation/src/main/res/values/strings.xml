@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ratting">Rating</string>
+    <string name="review">Reviews</string>
+    <string name="desc">Description</string>
+</resources>

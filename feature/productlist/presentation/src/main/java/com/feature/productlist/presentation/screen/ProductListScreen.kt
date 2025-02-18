@@ -28,6 +28,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,9 +45,9 @@ import com.example.common.layout.component.LoadingScreen
 import com.example.common.layout.component.ProductImage
 import com.feature.productlist.domain.model.Product
 import com.feature.productlist.domain.model.Rating
-import com.feature.productlist.presentation.utils.ARROW_DESC
-import com.feature.productlist.presentation.utils.PRODUCT_LIST
-import com.feature.productlist.presentation.utils.RATING
+import com.feature.productlist.presentation.utils.Constants.ARROW_DESC
+import com.feature.productlist.presentation.utils.Constants.PRODUCT_LIST
+import com.feature.productlist.presentation.utils.Constants.RATING
 
 @Composable
 fun ProductListScreenRoute(
@@ -97,7 +98,7 @@ fun ProductListScreen(
 ) {
     CommonScaffold(
         modifier = Modifier,
-        toolbarTitle = PRODUCT_LIST,
+        toolbarTitle = stringResource(PRODUCT_LIST),
         navigationButtonAction = null
     ) { innerPadding ->
         Box(
@@ -176,7 +177,7 @@ fun ProductItem(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Star,
-                        contentDescription = RATING,
+                        contentDescription = stringResource(RATING),
                         tint = Colors.Yellow,
                         modifier = Modifier.size(Dimensions.dp16)
                     )
@@ -184,7 +185,7 @@ fun ProductItem(
                     Spacer(modifier = Modifier.width(Dimensions.dp4))
 
                     Text(
-                        text = "${product.rating.rate} $RATING",
+                        text = "${product.rating.rate} ${stringResource(RATING)}",
                         fontSize = TypographySizes.sp12,
                         color = Colors.Gray
                     )
@@ -193,7 +194,7 @@ fun ProductItem(
 
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = ARROW_DESC,
+                contentDescription = stringResource(ARROW_DESC),
                 modifier = Modifier.size(Dimensions.dp24),
                 tint = Colors.Black
             )
