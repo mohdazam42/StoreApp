@@ -1,5 +1,6 @@
 package com.feature.productlist.presentation.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -49,6 +52,7 @@ import com.feature.productlist.presentation.utils.Constants.ARROW_DESC
 import com.feature.productlist.presentation.utils.Constants.PRODUCT_LIST
 import com.feature.productlist.presentation.utils.Constants.RATING
 
+@SuppressLint("RememberReturnType")
 @Composable
 fun ProductListScreenRoute(
     viewModel: ProductListViewModel = hiltViewModel(),
@@ -57,8 +61,13 @@ fun ProductListScreenRoute(
 
     val productListState by viewModel.state.collectAsStateWithLifecycle()
 
-    LaunchedEffect(true) {
-        viewModel.onEvent(ProductListEvent.LoadProducts)
+    val isDataLoaded = rememberSaveable { mutableStateOf(false) }
+
+    if (!isDataLoaded.value) {
+        LaunchedEffect(Unit) {
+            viewModel.onEvent(ProductListEvent.LoadProducts)
+            isDataLoaded.value = true
+        }
     }
 
     when (val state = productListState) {

@@ -16,10 +16,8 @@ class ProductDetailViewModel @Inject constructor(private val getProductDetailUse
 
     private val _state: MutableStateFlow<ProductDetailState> = MutableStateFlow(ProductDetailState.Loading)
     val state = _state.asStateFlow()
-    private var isLoaded = false
 
     private fun fetchProduct(productId: Int) {
-        if (isLoaded) return
         viewModelScope.launch {
             _state.value = ProductDetailState.Loading
             when (val result = getProductDetailUseCase.invoke(productId)) {
@@ -28,7 +26,6 @@ class ProductDetailViewModel @Inject constructor(private val getProductDetailUse
                 }
                 is ApiResult.Success ->  {
                     _state.value = ProductDetailState.Success(result.data)
-                    isLoaded = true
                 }
             }
         }

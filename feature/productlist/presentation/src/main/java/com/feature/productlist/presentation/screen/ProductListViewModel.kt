@@ -16,10 +16,8 @@ class ProductListViewModel @Inject constructor(private val getProductListUseCase
 
     private val _state: MutableStateFlow<ProductListState> = MutableStateFlow(ProductListState.Loading)
     val state = _state.asStateFlow()
-    private var isLoaded = false
 
     private fun fetchAllProducts() {
-        if (isLoaded) return
         viewModelScope.launch {
             _state.value = ProductListState.Loading
             when (val result = getProductListUseCase()) {
@@ -28,7 +26,6 @@ class ProductListViewModel @Inject constructor(private val getProductListUseCase
                 }
                 is ApiResult.Success ->  {
                     _state.value = ProductListState.Success(result.data)
-                    isLoaded = true
                 }
             }
         }
