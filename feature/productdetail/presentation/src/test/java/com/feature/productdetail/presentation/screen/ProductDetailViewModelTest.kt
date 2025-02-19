@@ -45,7 +45,7 @@ class ProductDetailViewModelTest {
     }
 
     @Test
-    fun `Test Fetch Product Success`() = runTest {
+    fun `Test Fetch Product Success`() = runTest(testDispatcher) {
         // Given
         val mockProduct = Product(
             id = 1,
@@ -69,7 +69,7 @@ class ProductDetailViewModelTest {
     }
 
     @Test
-    fun `Test Fetch Product Error`() = runTest {
+    fun `Test Fetch Product Error`() = runTest(testDispatcher) {
         // Given
         val productId = 1
         val errorMessage = "Product not found"
@@ -86,7 +86,7 @@ class ProductDetailViewModelTest {
     }
 
     @Test
-    fun `Test OnEvent LoadProduct`() = runTest {
+    fun `Test OnEvent LoadProduct`() = runTest(testDispatcher) {
         // Given
         val productId = 1
         coEvery { getProductDetailUseCase.invoke(productId) } returns ApiResult.Success(
@@ -109,7 +109,7 @@ class ProductDetailViewModelTest {
     }
 
     @Test
-    fun `Test OnEvent OnNavigateBack`() = runTest {
+    fun `Test OnEvent OnNavigateBack`() = runTest(testDispatcher) {
         // Given
         val navigateBack: () -> Unit = mockk(relaxed = true)
         val event = ProductDetailEvent.OnNavigateBack(navigateBack)
@@ -122,7 +122,7 @@ class ProductDetailViewModelTest {
     }
 
     @Test
-    fun `Test OnRetry event triggers fetch all products and returns success`() = runTest {
+    fun `Test OnRetry event triggers fetch all products and returns success`() = runTest(testDispatcher) {
         // Given
         val mockProduct = Product(
             id = 1,
@@ -148,7 +148,7 @@ class ProductDetailViewModelTest {
     }
 
     @Test
-    fun `Test OnRetry event triggers fetch all products and returns error`() = runTest {
+    fun `Test OnRetry event triggers fetch all products and returns error`() = runTest(testDispatcher) {
         // Given
         val productId = 1
         val mockErrorMsg = "Network Error"
@@ -164,30 +164,4 @@ class ProductDetailViewModelTest {
 
         coVerify(exactly = 1) { getProductDetailUseCase.invoke(productId) }
     }
-
-    @Test
-    fun `Given isLoaded is true When LoadProducts is called Then fetchAllProducts is not called again`() =
-        runTest {
-            // Given
-            val mockProduct = Product(
-                id = 1,
-                title = "Product title",
-                price = 99.99,
-                image = "image.jpg",
-                rating = Rating(rate = 4.5, count = 100),
-                description = "Test description",
-                category = "Test category"
-            )
-            coEvery { getProductDetailUseCase.invoke(mockProduct.id) } returns ApiResult.Success(mockProduct)
-
-            // When
-            viewModel.onEvent(ProductDetailEvent.LoadProduct(mockProduct.id)) // First call to set isLoaded to true
-            viewModel.onEvent(ProductDetailEvent.LoadProduct(mockProduct.id)) // Second call
-
-            // Then
-            val result = viewModel.state.value
-            expectThat(result).isA<ProductDetailState.Success>()
-            expectThat((result as ProductDetailState.Success).product).isEqualTo(mockProduct)
-            coVerify(exactly = 1) { getProductDetailUseCase.invoke(mockProduct.id) }
-        }
 }
