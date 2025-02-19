@@ -13,8 +13,8 @@ import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -28,7 +28,7 @@ import strikt.assertions.isEqualTo
 @OptIn(ExperimentalCoroutinesApi::class)
 class ProductListViewModelTest {
 
-    private val testDispatcher: TestDispatcher = StandardTestDispatcher()
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
     private val getProductListUseCase: GetProductListUseCase = mockk()
     private lateinit var viewModel: ProductListViewModel
 
@@ -68,7 +68,6 @@ class ProductListViewModelTest {
 
         // When
         viewModel.onEvent(ProductListEvent.LoadProducts)
-        testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
         val result = viewModel.state.value
@@ -85,7 +84,6 @@ class ProductListViewModelTest {
 
         // When
         viewModel.onEvent(ProductListEvent.LoadProducts)
-        testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
         val result = viewModel.state.value
@@ -103,7 +101,6 @@ class ProductListViewModelTest {
 
         // When
         viewModel.onEvent(event)
-        testDispatcher.scheduler.advanceUntilIdle()
 
         // Then
         verify(exactly = 1) { navigateToDetails.invoke(productId) }

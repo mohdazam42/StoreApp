@@ -36,7 +36,7 @@ class ProductListRepositoryTest {
     }
 
     @Test
-    fun `Given API call is successful When getAllProducts is called Then emit Loading first then Success`() =
+    fun `Given API call is successful When getAllProducts is called and return Success`() =
         runTest {
             // Given
             val mockProductDtos = listOf(
@@ -68,7 +68,7 @@ class ProductListRepositoryTest {
         }
 
     @Test
-    fun `Given API call fails When getAllProducts is called Then emit Loading first then Error`() =
+    fun `Given API call fails When getAllProducts is called and return Error`() =
         runTest {
             // Given
             val exception = RuntimeException("Network Error")

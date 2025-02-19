@@ -10,6 +10,12 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import kotlinx.coroutines.withContext
 import org.junit.After
 import org.junit.Before
@@ -18,25 +24,28 @@ import strikt.api.expectThat
 import strikt.assertions.isA
 import strikt.assertions.isEqualTo
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SafeApiCallTest {
 
+    private val testDispatcher: TestDispatcher = UnconfinedTestDispatcher()
     private val mockApiCall: suspend () -> String = mockk()
     private val mockMapper: (String) -> Int = mockk()
 
     @Before
     fun setUp() {
-        // Setup behavior for mocks if needed
+        Dispatchers.setMain(testDispatcher)
     }
 
     @After
     fun tearDown() {
         clearAllMocks()
         unmockkAll()
+        Dispatchers.resetMain()
     }
 
     @Test
     fun `Given a successful API call When safeApiCall is executed Then emit Success`() =
-        runUnconfinedTest {
+        runTest(testDispatcher) {
             // Given
             val apiResponse = "Success Response"
             val mappedValue = 42
@@ -51,14 +60,13 @@ class SafeApiCallTest {
             // Then
             expectThat(result).isA<ApiResult.Success<Int>>()
             expectThat((result as ApiResult.Success).data).isEqualTo(mappedValue)
-
             coVerify(exactly = 1) { mockApiCall() }
             verify(exactly = 1) { mockMapper(apiResponse) }
         }
 
     @Test
     fun `Given an API call failure When safeApiCall is executed Then emit Error`() =
-        runUnconfinedTest {
+        runTest(testDispatcher) {
             // Given
             val exception = RuntimeException("Network Error")
 
@@ -71,14 +79,13 @@ class SafeApiCallTest {
             // Then
             expectThat(result).isA<ApiResult.Error>()
             expectThat((result as ApiResult.Error).message).isEqualTo("Network Error")
-
             coVerify(exactly = 1) { mockApiCall() }
             verify(exactly = 0) { mockMapper(any()) }
         }
 
     @Test
     fun `Given a successful API call When safeApiCall is executed Then it runs on Dispatchers IO`() =
-        runUnconfinedTest {
+        runTest(testDispatcher) {
             // Given
             val apiResponse = "Success Response"
             val mappedValue = 42
@@ -94,7 +101,6 @@ class SafeApiCallTest {
 
             // Then
             expectThat(result).isA<ApiResult.Success<Int>>()
-
             coVerify(exactly = 1) { mockApiCall() }
             verify(exactly = 1) { mockMapper(apiResponse) }
         }
