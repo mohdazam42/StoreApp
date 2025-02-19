@@ -15,6 +15,6 @@ suspend fun <T, R> safeApiCall(
         ApiResult.Success(mapper(response))
     } catch (e: Exception) {
         // Catch the error and Emit Error
-        ApiResult.Error(message = e.message ?: UNKNOWN_ERROR)
+        ApiResult.Error(SOMETHING_WENT_WRONG)
     }
 }

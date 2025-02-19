@@ -105,4 +105,87 @@ class ProductListViewModelTest {
         // Then
         verify(exactly = 1) { navigateToDetails.invoke(productId) }
     }
+
+    @Test
+    fun `Test OnRetry event triggers fetch all products and returns success`() = runTest {
+        // Given
+        val mockProductList = listOf(
+            Product(
+                id = 1,
+                title = "Product 1",
+                price = 10.0,
+                image = "image1.jpg",
+                rating = Rating(rate = 4.5, count = 100)
+            ),
+            Product(
+                id = 2,
+                title = "Product 2",
+                price = 20.0,
+                image = "image2.jpg",
+                rating = Rating(rate = 3.5, count = 50)
+            )
+        )
+        coEvery { getProductListUseCase.invoke() } returns ApiResult.Success(mockProductList)
+
+        // When
+        viewModel.onEvent(ProductListEvent.OnRetry)
+
+        // Then
+        val result = viewModel.state.value
+        expectThat(result).isA<ProductListState.Success>()
+        expectThat((result as ProductListState.Success).productList).isEqualTo(mockProductList)
+
+        // Verify
+        coVerify(exactly = 1) { getProductListUseCase.invoke() }
+    }
+
+    @Test
+    fun `Test OnRetry event triggers fetch all products and returns error`() = runTest {
+        // Given
+        val mockErrorMsg = "Network Error"
+        coEvery { getProductListUseCase.invoke() } returns ApiResult.Error(mockErrorMsg)
+
+        // When
+        viewModel.onEvent(ProductListEvent.OnRetry)
+
+        // Then
+        val result = viewModel.state.value
+        expectThat(result).isA<ProductListState.Error>()
+        expectThat((result as ProductListState.Error).message).isEqualTo(mockErrorMsg)
+
+        coVerify(exactly = 1) { getProductListUseCase.invoke() }
+    }
+
+    @Test
+    fun `Given isLoaded is true When LoadProducts is called Then fetchAllProducts is not called again`() =
+        runTest {
+            // Given
+            val mockProductList = listOf(
+                Product(
+                    id = 1,
+                    title = "Product 1",
+                    price = 10.0,
+                    image = "image1.jpg",
+                    rating = Rating(rate = 4.5, count = 100)
+                ),
+                Product(
+                    id = 2,
+                    title = "Product 2",
+                    price = 20.0,
+                    image = "image2.jpg",
+                    rating = Rating(rate = 3.5, count = 50)
+                )
+            )
+            coEvery { getProductListUseCase.invoke() } returns ApiResult.Success(mockProductList)
+
+            // When
+            viewModel.onEvent(ProductListEvent.LoadProducts) // First call to set isLoaded to true
+            viewModel.onEvent(ProductListEvent.LoadProducts) // Second call
+
+            // Then
+            val result = viewModel.state.value
+            expectThat(result).isA<ProductListState.Success>()
+            expectThat((result as ProductListState.Success).productList).isEqualTo(mockProductList)
+            coVerify(exactly = 1) { getProductListUseCase.invoke() }
+        }
 }

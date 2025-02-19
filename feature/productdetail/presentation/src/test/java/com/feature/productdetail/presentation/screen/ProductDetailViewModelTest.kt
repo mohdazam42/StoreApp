@@ -120,4 +120,74 @@ class ProductDetailViewModelTest {
         // Then
         verify(exactly = 1) { navigateBack() }
     }
+
+    @Test
+    fun `Test OnRetry event triggers fetch all products and returns success`() = runTest {
+        // Given
+        val mockProduct = Product(
+            id = 1,
+            title = "Product title",
+            price = 99.99,
+            image = "image.jpg",
+            rating = Rating(rate = 4.5, count = 100),
+            description = "Test description",
+            category = "Test category"
+        )
+        coEvery { getProductDetailUseCase.invoke(mockProduct.id) } returns ApiResult.Success(mockProduct)
+
+        // When
+        viewModel.onEvent(ProductDetailEvent.OnRetry(productId = mockProduct.id))
+
+        // Then
+        val result = viewModel.state.value
+        expectThat(result).isA<ProductDetailState.Success>()
+        expectThat((result as ProductDetailState.Success).product).isEqualTo(mockProduct)
+
+        // Verify
+        coVerify(exactly = 1) { getProductDetailUseCase.invoke(mockProduct.id) }
+    }
+
+    @Test
+    fun `Test OnRetry event triggers fetch all products and returns error`() = runTest {
+        // Given
+        val productId = 1
+        val mockErrorMsg = "Network Error"
+        coEvery { getProductDetailUseCase.invoke(productId) } returns ApiResult.Error(mockErrorMsg)
+
+        // When
+        viewModel.onEvent(ProductDetailEvent.OnRetry(productId))
+
+        // Then
+        val result = viewModel.state.value
+        expectThat(result).isA<ProductDetailState.Error>()
+        expectThat((result as ProductDetailState.Error).message).isEqualTo(mockErrorMsg)
+
+        coVerify(exactly = 1) { getProductDetailUseCase.invoke(productId) }
+    }
+
+    @Test
+    fun `Given isLoaded is true When LoadProducts is called Then fetchAllProducts is not called again`() =
+        runTest {
+            // Given
+            val mockProduct = Product(
+                id = 1,
+                title = "Product title",
+                price = 99.99,
+                image = "image.jpg",
+                rating = Rating(rate = 4.5, count = 100),
+                description = "Test description",
+                category = "Test category"
+            )
+            coEvery { getProductDetailUseCase.invoke(mockProduct.id) } returns ApiResult.Success(mockProduct)
+
+            // When
+            viewModel.onEvent(ProductDetailEvent.LoadProduct(mockProduct.id)) // First call to set isLoaded to true
+            viewModel.onEvent(ProductDetailEvent.LoadProduct(mockProduct.id)) // Second call
+
+            // Then
+            val result = viewModel.state.value
+            expectThat(result).isA<ProductDetailState.Success>()
+            expectThat((result as ProductDetailState.Success).product).isEqualTo(mockProduct)
+            coVerify(exactly = 1) { getProductDetailUseCase.invoke(mockProduct.id) }
+        }
 }
